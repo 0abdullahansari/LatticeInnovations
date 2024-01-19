@@ -1,12 +1,16 @@
 import express from "express";
+import { writeToDB } from "../util/writeToDB";
 
 export const register = async (req, res) => {
   try {
-    const { name, address, email, phone, password, photo } = req.body;
-    if (!(name && address && email && password && photo))
-      res
-        .status(400)
-        .json({ status: "Failed", error: "Mandatory fields found empty." });
-    name = name.trim().replace(/\s+/g, " ");
-  } catch (error) {}
+    writeToDB();
+    return res
+      .status(201)
+      .json({ status: "Successful", message: "Registered successfully." });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ status: "Failed", error: "Server side error." });
+  }
 };
