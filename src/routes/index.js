@@ -1,5 +1,5 @@
 import { Router } from "express";
-import register from "./register";
+import register from "./register.js";
 
 const router = Router();
 

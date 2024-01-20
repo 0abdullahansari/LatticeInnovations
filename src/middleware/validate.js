@@ -1,28 +1,40 @@
-import { isEmail, isMobilePhone } from "validator";
+import validator from "validator";
+import { patienExists } from "../util/patientExists.js";
+import { validatePsychID } from "../util/validatePsychID.js";
+import fs from "fs";
 
-export const validate = (req, res, next) => {
+export const validate = async (req, res, next) => {
   try {
     const { name, address, email, phone, password } = req.body;
 
-    if (!(name && address && email && password && photo && req.file))
+    if (!(name && address && email && password && req.file.originalname))
       return res
         .status(400)
         .json({ status: "Failed", error: "Mandatory fields found empty." });
 
-    name = name.trim().replace(/\s+/g, " ");
+    req.body.name = name.trim().replace(/\s+/g, " ");
 
-    address = address.trim().replace(/\s+/g, " ");
+    const temp_address = address.trim().replace(/\s+/g, " ");
 
-    if (address.length < 10)
+    if (temp_address.length < 10)
       return res
         .status(400)
         .json({ status: "Failed", error: "Provide full address." });
 
-    if (!isEmail)
-      return res.status(400).json({ status: "Failed", erro: "Invalid Email." });
+    req.body.address = temp_address;
+
+    if (await validatePsychID(req.body.psych_id))
+      return res
+        .status(400)
+        .json({ status: "Failed", error: "Invalid psychiatrist ID." });
+
+    if (!validator.isEmail(email))
+      return res
+        .status(400)
+        .json({ status: "Failed", error: "Invalid Email." });
 
     if (phone) {
-      if (!isMobilePhone(phone, "any", { strictMode: true })) {
+      if (!validator.isMobilePhone(phone, "any", { strictMode: true })) {
         return res
           .status(400)
           .json({ status: "Failed", error: "Invalid Phone no." });
@@ -47,11 +59,32 @@ export const validate = (req, res, next) => {
         .json({ status: "Failed", error: "Only images are allowed." });
     }
 
-    next();
+    const existence = await patienExists(
+      req.body.name,
+      temp_address,
+      req.body.psych_id
+    );
+
+    switch (existence) {
+      case 1:
+        return res.status(400).json({
+          status: "Failed",
+          error: "Patient already registered by you.",
+        });
+
+      case 2:
+        return res.status(400).json({
+          status: "Failed",
+          error: "Patient already registered by other psychiatrist.",
+        });
+      case 3:
+        next();
+    }
   } catch (error) {
     console.log(error);
+    fs.unlinkSync(req.file.path);
     return res
       .status(400)
-      .json({ status: "Failed", error: "Unexpected client side erro." });
+      .json({ status: "Failed", error: "Unexpected client side error." });
   }
 };
