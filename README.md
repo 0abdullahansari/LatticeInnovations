@@ -24,4 +24,5 @@ To run this project locally, follow these steps:
 
 1. Clone the repo.
 2. Install node modules.
-3. Run "npm start".  
+3. Run "npm start".
+   ### Note: Additional changes will be required if dump is to be used.
