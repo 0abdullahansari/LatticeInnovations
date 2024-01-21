@@ -6,18 +6,35 @@ export const writeToDB = async (req, res) => {
   const connection = await getConnection();
   try {
     const hashedPassword = await bcrypt.hash(req.body.password, 2);
-    await connection.execute(
-      "INSERT INTO patients(psych_id, patient_name, address, email, phone, password, photo) VALUES(?, ?, ?, ?, ?, ?, ?)",
-      [
-        req.body.psych_id,
-        req.body.name,
-        req.body.address,
-        req.body.email,
-        req.body.phone,
-        hashedPassword,
-        req.img_details.url,
-      ]
-    );
+
+    const phoneNumber = req.body.phone || null;
+
+    // Use placeholders in the SQL query based on the presence of the phone number
+    const query = phoneNumber
+      ? "INSERT INTO patients(psych_id, patient_name, address, email, phone, password, photo) VALUES(?, ?, ?, ?, ?, ?, ?)"
+      : "INSERT INTO patients(psych_id, patient_name, address, email, password, photo) VALUES(?, ?, ?, ?, ?, ?)";
+
+    const params = phoneNumber
+      ? [
+          req.body.psych_id,
+          req.body.name,
+          req.body.address,
+          req.body.email,
+          phoneNumber,
+          hashedPassword,
+          req.img_details.url,
+        ]
+      : [
+          req.body.psych_id,
+          req.body.name,
+          req.body.address,
+          req.body.email,
+          hashedPassword,
+          req.img_details.url,
+        ];
+
+    await connection.execute(query, params);
+
     return res
       .status(201)
       .json({ status: "Successful", message: "Registered successfully." });

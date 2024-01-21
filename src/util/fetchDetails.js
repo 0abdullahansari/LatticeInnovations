@@ -11,16 +11,16 @@ export const fetchDetails = async (req, res) => {
       psychiatristsDetails: [],
       patientDetails: [],
     };
-    if (!req.query.id) {
+    if (!req.query.hospital_id) {
       return res
         .status(400)
         .json({ status: "Failed", error: "Provide hospital id." });
-    } else if (!(await validateHospitalID(req.query.id))) {
+    } else if (!(await validateHospitalID(req.query.hospital_id))) {
       return res
         .status(400)
         .json({ status: "Failed", error: "Invalid hospital id." });
     }
-    const h_id = req.query.id;
+    const h_id = req.query.hospital_id;
 
     const [rows] = await connection.execute(
       "SELECT * FROM hospitals JOIN psychiatrists ON hospitals.hospital_id = psychiatrists.hospital_id JOIN patients ON psychiatrists.psych_id = patients.psych_id"

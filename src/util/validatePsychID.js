@@ -10,7 +10,6 @@ export const validatePsychID = async (psych_id) => {
       "SELECT psych_id FROM psychiatrists"
     );
     for (let row of rows) {
-      console.log(psych_id);
       if (row.psych_id.toString() === psych_id) return false;
     }
     return true;
