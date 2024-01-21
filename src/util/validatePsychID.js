@@ -3,15 +3,17 @@ import { getConnection } from "../db/connection.js";
 const connection = await getConnection();
 
 export const validatePsychID = async (psych_id) => {
+  const connection = await getConnection();
   try {
-    const connection = await getConnection();
-    const [rows, fields] = await connection.execute(
+    if (!psych_id) return true;
+    const [rows] = await connection.execute(
       "SELECT psych_id FROM psychiatrists"
     );
-    rows.forEach((item) => {
-      if (item.psych_id === psych_id) return true;
-    });
-    return false;
+    for (let row of rows) {
+      console.log(psych_id);
+      if (row.psych_id.toString() === psych_id) return false;
+    }
+    return true;
   } catch (error) {
     throw error;
   } finally {

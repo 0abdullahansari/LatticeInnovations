@@ -2,18 +2,18 @@ import { getConnection } from "../db/connection.js";
 
 const connection = await getConnection();
 
-export const patienExists = async (name, address, psych_id) => {
+export const validateHospitalID = async (id) => {
   const connection = await getConnection();
   try {
     const [rows] = await connection.execute(
-      "SELECT psych_id FROM patients WHERE(patient_name = ? AND address = ?)",
-      [name, address]
+      "SELECT hospital_id FROM hospitals WHERE(hospital_id=?)",
+      [id]
     );
     return rows.length > 0
-      ? psych_id === rows[0].psych_id.toString()
-        ? 1
-        : 2
-      : 3;
+      ? rows[0].hospital_id.toString() === id
+        ? true
+        : false
+      : false;
   } catch (error) {
     throw error;
   } finally {

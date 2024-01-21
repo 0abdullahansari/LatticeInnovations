@@ -1,22 +1,23 @@
 import { getConnection } from "../db/connection.js";
 import { v2 as cloudinary } from "cloudinary";
+import bcrypt from "bcrypt";
 
 export const writeToDB = async (req, res) => {
+  const connection = await getConnection();
   try {
-    const connection = await getConnection();
+    const hashedPassword = await bcrypt.hash(req.body.password, 2);
     await connection.execute(
-      "INSERT INTO patients(psych_id, name, address, email, phone, password, photo) VALUES(?, ?, ?, ?, ?, ?, ?)",
+      "INSERT INTO patients(psych_id, patient_name, address, email, phone, password, photo) VALUES(?, ?, ?, ?, ?, ?, ?)",
       [
         req.body.psych_id,
         req.body.name,
         req.body.address,
         req.body.email,
         req.body.phone,
-        req.body.password,
+        hashedPassword,
         req.img_details.url,
       ]
     );
-    connection.release();
     return res
       .status(201)
       .json({ status: "Successful", message: "Registered successfully." });
@@ -26,5 +27,7 @@ export const writeToDB = async (req, res) => {
     return res
       .status(503)
       .json({ status: "Failed", error: "Experiencing issues with database." });
+  } finally {
+    connection.release();
   }
 };
