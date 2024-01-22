@@ -1,6 +1,6 @@
 import { upload } from "../middleware/multer.js";
 import { validate } from "../middleware/validate.js";
-import { writeToCloud } from "../controllers/cloudinary.js";
+import { writeToCloud } from "../middleware/cloudinary.js";
 import { writeToDB } from "../controllers/writeToDB.js";
 
 export default (router) => {
