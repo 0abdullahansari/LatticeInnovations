@@ -24,3 +24,17 @@ To run this project locally, follow these steps:
 1. Clone the repo.
 2. Install node modules.
 3. Run "npm start".
+
+## Dump Import instructions [Not Needed For Testing]
+1. Open MySQL Workbench.
+2. Connect to local instance.
+3. Switch to "Administration" tab in Navigator.
+4. Select "Data Import/Restore" under management.
+5. Select "Import from Dump Project Folder" (selected by default).
+6. Browse for the folder named "database" in repo.
+7. Switch to "Import Progress" tab.
+8. Click "Start Import" at lower right.
+9. After finished refresh your navigation section.
+10. Database will be imported by the name "defaultdb".
+
+
