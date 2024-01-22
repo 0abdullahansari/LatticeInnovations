@@ -38,7 +38,11 @@ export const writeToDB = async (req, res) => {
 
     return res
       .status(201)
-      .json({ status: "Successful", message: "Registered successfully." });
+      .json({
+        status: "Successful",
+        message: "Registered successfully.",
+        registeredData: req.body,
+      });
   } catch (error) {
     cloudinary.api.delete_resources(req.img_details.public_id);
     console.log(error);
