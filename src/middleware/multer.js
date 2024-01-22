@@ -1,4 +1,3 @@
-import express from "express";
 import multer from "multer";
 
 const storage = multer.diskStorage({
@@ -10,4 +9,11 @@ const storage = multer.diskStorage({
   },
 });
 
-export const upload = multer({ storage: storage });
+const fileFilter = (req, file, cb) => {
+  if (req.files && req.files.length > 1) {
+    return cb(new Error("Only one file is allowed"));
+  }
+  cb(null, true);
+};
+
+export const upload = multer({ storage: storage, fileFilter: fileFilter });

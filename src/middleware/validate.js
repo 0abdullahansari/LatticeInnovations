@@ -23,6 +23,13 @@ export const validate = async (req, res, next) => {
 
     req.body.name = name.trim().replace(/\s+/g, " ");
 
+    if (req.body.name.length < 2) {
+      fs.unlinkSync(req.file.path);
+      return res
+        .status(400)
+        .json({ status: "Failed", error: "Name too short." });
+    }
+
     const temp_address = address.trim().replace(/\s+/g, " ");
 
     if (temp_address.length < 10) {
@@ -60,12 +67,16 @@ export const validate = async (req, res, next) => {
           "Password length must be 8 to 15, contain atleast uppercase and lowercase alphabet and a number.",
       });
     }
-
     if (!req.file.mimetype.startsWith("image/")) {
       fs.unlinkSync(req.file.path);
       return res
         .status(400)
         .json({ status: "Failed", error: "Only images are allowed." });
+    } else if (req.file.size > 2097152) {
+      fs.unlinkSync(req.file.path);
+      return res
+        .status(400)
+        .json({ status: "Failed", error: "Image size shoud be under 2MB." });
     }
 
     const existence = await patienExists(

@@ -1,7 +1,5 @@
 import { getConnection } from "../db/connection.js";
 
-const connection = await getConnection();
-
 export const validatePsychID = async (psych_id) => {
   const connection = await getConnection();
   try {
