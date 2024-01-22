@@ -1,5 +1,5 @@
 import { getConnection } from "../db/connection.js";
-import { validateHospitalID } from "./validateHospitalID.js";
+import { validateHospitalID } from "../util/validateHospitalID.js";
 
 export const fetchDetails = async (req, res) => {
   const connection = await getConnection();
