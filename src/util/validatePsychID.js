@@ -1,5 +1,7 @@
 import { getConnection } from "../db/connection.js";
 
+// This function validates psychiatrist id by checking its presence in database.
+
 export const validatePsychID = async (psych_id) => {
   const connection = await getConnection();
   try {

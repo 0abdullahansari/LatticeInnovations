@@ -1,5 +1,7 @@
 import multer from "multer";
 
+// Configuration for multer to handle incoming photos.
+
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "./public/temp");
@@ -9,11 +11,4 @@ const storage = multer.diskStorage({
   },
 });
 
-const fileFilter = (req, file, cb) => {
-  if (req.files && req.files.length > 1) {
-    return cb(new Error("Only one file is allowed"));
-  }
-  cb(null, true);
-};
-
-export const upload = multer({ storage: storage, fileFilter: fileFilter });
+export const upload = multer({ storage: storage });

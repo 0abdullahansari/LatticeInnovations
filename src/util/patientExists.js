@@ -1,6 +1,6 @@
 import { getConnection } from "../db/connection.js";
 
-const connection = await getConnection();
+// This function checks if the patient is already registered by the same psychiatrist or some other.
 
 export const patienExists = async (name, address, psych_id) => {
   const connection = await getConnection();

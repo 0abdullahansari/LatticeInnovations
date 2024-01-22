@@ -7,6 +7,8 @@ cloudinary.config({
   api_secret: "_rD6EtuQZeWmMqYbsQK891uszAI",
 });
 
+// This function handles patient photo upload to cloudinary and appends the img url in req object.
+
 export const writeToCloud = async (req, res, next) => {
   try {
     // console.log(process.env.CLOUD_NAME);

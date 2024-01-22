@@ -1,6 +1,6 @@
 import { getConnection } from "../db/connection.js";
 
-const connection = await getConnection();
+// This fumction checks if the hospital id is valid by querying database.
 
 export const validateHospitalID = async (id) => {
   const connection = await getConnection();

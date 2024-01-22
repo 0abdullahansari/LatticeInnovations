@@ -2,6 +2,8 @@ import { getConnection } from "../db/connection.js";
 import { v2 as cloudinary } from "cloudinary";
 import bcrypt from "bcrypt";
 
+// This function is called after the form data is validated and registers the patient.
+
 export const writeToDB = async (req, res) => {
   const connection = await getConnection();
   try {
@@ -9,7 +11,6 @@ export const writeToDB = async (req, res) => {
 
     const phoneNumber = req.body.phone || null;
 
-    // Use placeholders in the SQL query based on the presence of the phone number
     const query = phoneNumber
       ? "INSERT INTO patients(psych_id, patient_name, address, email, phone, password, photo) VALUES(?, ?, ?, ?, ?, ?, ?)"
       : "INSERT INTO patients(psych_id, patient_name, address, email, password, photo) VALUES(?, ?, ?, ?, ?, ?)";

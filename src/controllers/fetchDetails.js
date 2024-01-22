@@ -1,6 +1,8 @@
 import { getConnection } from "../db/connection.js";
 import { validateHospitalID } from "../util/validateHospitalID.js";
 
+// This function validates hospital id and fetches relevant data.
+
 export const fetchDetails = async (req, res) => {
   const connection = await getConnection();
   try {

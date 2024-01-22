@@ -11,6 +11,8 @@ const pool = mysql2.createPool({
   queueLimit: 0,
 });
 
+// This function returns a MySQL connection from pool.
+
 export const getConnection = async () => {
   return await pool.getConnection();
 };

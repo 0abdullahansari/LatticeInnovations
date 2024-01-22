@@ -3,6 +3,8 @@ import { validate } from "../middleware/validate.js";
 import { writeToCloud } from "../middleware/cloudinary.js";
 import { writeToDB } from "../controllers/writeToDB.js";
 
+// This function configures route and defines validation for the number of files.
+
 export default (router) => {
   router.post(
     "/register",

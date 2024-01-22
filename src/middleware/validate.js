@@ -3,6 +3,8 @@ import { patienExists } from "../util/patientExists.js";
 import { validatePsychID } from "../util/validatePsychID.js";
 import fs from "fs";
 
+// This function validates form data.
+
 export const validate = async (req, res, next) => {
   try {
     if (await validatePsychID(req.body.psych_id)) {
