@@ -7,22 +7,21 @@ import fs from "fs";
 
 export const validate = async (req, res, next) => {
   try {
+    const { name, address, email, phone, password } = req.body;
+
+    if (!(name && address && email && password && req.file)) {
+      if (req.file) fs.unlinkSync(req.file.path);
+      return res
+        .status(400)
+        .json({ status: "Failed", error: "Mandatory fields found empty." });
+    }
+
     if (await validatePsychID(req.body.psych_id)) {
       fs.unlinkSync(req.file.path);
       return res
         .status(400)
         .json({ status: "Failed", error: "Invalid psychiatrist ID." });
     }
-
-    const { name, address, email, phone, password } = req.body;
-
-    if (!(name && address && email && password && req.file.originalname)) {
-      fs.unlinkSync(req.file.path);
-      return res
-        .status(400)
-        .json({ status: "Failed", error: "Mandatory fields found empty." });
-    }
-
     req.body.name = name.trim().replace(/\s+/g, " ");
 
     if (req.body.name.length < 2) {
@@ -108,7 +107,7 @@ export const validate = async (req, res, next) => {
     }
   } catch (error) {
     console.log(error);
-    fs.unlinkSync(req.file.path);
+    if (req.file) fs.unlinkSync(req.file.path);
     return res
       .status(400)
       .json({ status: "Failed", error: "Unexpected client side error." });
